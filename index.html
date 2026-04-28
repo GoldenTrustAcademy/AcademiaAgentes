@@ -2279,181 +2279,110 @@
 
 <script>
   const CORRECT_CODE = "TOPGOLDEN2026";
+  let currentUser = "";
+  let userProgress = {};
 
-  const modules = [
-    { title: "Módulo 1 · Fundamentos del seguro de vida", lessons: [
-      { name: "¿Qué es un seguro de vida?", dur: "8 min", state: "done" },
-      { name: "Historia y evolución", dur: "10 min", state: "done" },
-      { name: "Terminología esencial", dur: "12 min", state: "done" },
-      { name: "Marco legal en EE.UU.", dur: "15 min", state: "done" }
-    ]},
-    { title: "Módulo 2 · Tipos de pólizas y coberturas", lessons: [
-      { name: "Term Life", dur: "12 min", state: "done" },
-      { name: "Whole Life", dur: "14 min", state: "done" },
-      { name: "Universal Life / IUL", dur: "16 min", state: "done" },
-      { name: "Riders", dur: "10 min", state: "done" },
-      { name: "Comparativa", dur: "18 min", state: "done" }
-    ]},
-    { title: "Módulo 3 · Cómo presentar al cliente", lessons: [
-      { name: "Cliente ideal", dur: "15 min", state: "done" },
-      { name: "Rapport y confianza", dur: "18 min", state: "current" },
-      { name: "Presentación de necesidades", dur: "20 min", state: "pending" },
-      { name: "Ilustraciones", dur: "12 min", state: "pending" },
-      { name: "Propuesta personalizada", dur: "14 min", state: "pending" },
-      { name: "Cierre de presentación", dur: "11 min", state: "pending" }
-    ]},
-    { title: "Módulo 4 · Manejo de objeciones", lessons: [
-      { name: "Las 5 objeciones más comunes", dur: "14 min", state: "pending" },
-      { name: "Feel, Felt, Found", dur: "16 min", state: "pending" },
-      { name: "Roleplays", dur: "22 min", state: "pending" },
-      { name: "Práctica y evaluación", dur: "18 min", state: "pending" }
-    ]},
-    { title: "Módulo 5 · Cierre y seguimiento", lessons: [
-      { name: "Señales de compra", dur: "10 min", state: "pending" },
-      { name: "Técnicas de cierre", dur: "18 min", state: "pending" },
-      { name: "Post-venta", dur: "12 min", state: "pending" },
-      { name: "Fidelización y referidos", dur: "14 min", state: "pending" },
-      { name: "Construye tu cartera", dur: "16 min", state: "pending" }
-    ]}
-  ];
-
-  let isPlaying = false;
-
+  // ── SCREENS ──
   function show(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const el = document.getElementById(id);
-    if (el) el.classList.add('active');
+    document.querySelectorAll(".screen").forEach(function(s) {
+      s.classList.remove("active");
+    });
+    var el = document.getElementById(id);
+    if (el) el.classList.add("active");
     window.scrollTo(0, 0);
-    if (id === 'main') {
-      renderMedals();
-      const currentUser = localStorage.getItem('gt_current_user');
-      if (currentUser) {
-        const el2 = document.querySelector('.welcome-name');
-        if (el2) el2.textContent = currentUser;
-      }
-    }
-  }
-
-  // ── PER-USER PROGRESS ──
-  function getUserKey() {
-    const name = localStorage.getItem('gt_current_user') || 'default';
-    return 'gt_progress_' + name.toLowerCase().replace(/\s+/g,'_');
-  }
-  function loadProgress() {
-    try { return JSON.parse(localStorage.getItem(getUserKey()) || '{}'); } catch(e) { return {}; }
-  }
-  function saveProgress(p) {
-    try { localStorage.setItem(getUserKey(), JSON.stringify(p)); } catch(e) {}
-  }
-  function getAllUsersProgress() {
-    const users = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('gt_progress_')) {
-        const name = key.replace('gt_progress_', '').replace(/_/g,' ');
-        const prog = JSON.parse(localStorage.getItem(key) || '{}');
-        const completed = Object.values(prog).filter(v => v === 'done').length;
-        users.push({ name, completed, key });
-      }
-    }
-    return users.sort((a,b) => b.completed - a.completed);
+    if (id === "main") renderMedals();
   }
 
   // ── LOGIN ──
   function checkCode() {
-    const name = document.getElementById('name-input').value.trim();
-    const val = document.getElementById('code-input').value.trim().toUpperCase();
-    const errEl = document.getElementById('error-msg');
-    const inp = document.getElementById('code-input');
-    const nameInp = document.getElementById('name-input');
+    var name = document.getElementById("name-input").value.trim();
+    var val = document.getElementById("code-input").value.trim().toUpperCase();
+    var errEl = document.getElementById("error-msg");
     if (!name) {
-      errEl.textContent = 'Por favor ingresa tu nombre y apellido.';
-      nameInp.style.borderColor = '#E24B4A';
-      setTimeout(() => nameInp.style.borderColor = '', 1500);
+      errEl.textContent = "Por favor ingresa tu nombre y apellido.";
       return;
     }
     if (val === CORRECT_CODE) {
-      localStorage.setItem('gt_current_user', name);
-      const welcomeEl = document.querySelector('.welcome-name');
+      currentUser = name;
+      var welcomeEl = document.querySelector(".welcome-name");
       if (welcomeEl) welcomeEl.textContent = name;
-      show('main');
+      show("main");
     } else {
-      errEl.textContent = 'Código incorrecto. Inténtalo de nuevo.';
-      inp.classList.add('shake');
-      setTimeout(() => inp.classList.remove('shake'), 400);
+      errEl.textContent = "Codigo incorrecto. Intentalo de nuevo.";
+      var inp = document.getElementById("code-input");
+      inp.classList.add("shake");
+      setTimeout(function() { inp.classList.remove("shake"); }, 400);
     }
   }
 
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      const active = document.querySelector('.screen.active');
-      if (active && active.id === 'login') checkCode();
-      if (active && active.id === 'register3') finalLogin();
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      var active = document.querySelector(".screen.active");
+      if (active && active.id === "login") checkCode();
+      if (active && active.id === "register3") finalLogin();
     }
   });
 
   function logout() {
-    localStorage.removeItem('gt_current_user');
-    document.getElementById('code-input').value = '';
-    if(document.getElementById('name-input')) document.getElementById('name-input').value = '';
-    document.getElementById('error-msg').textContent = '';
-    show('login');
-  }
-
-  function showLocked() {
-    alert('Completa el módulo anterior para desbloquear este contenido.');
+    currentUser = "";
+    userProgress = {};
+    document.getElementById("code-input").value = "";
+    var ni = document.getElementById("name-input");
+    if (ni) ni.value = "";
+    document.getElementById("error-msg").textContent = "";
+    show("login");
   }
 
   // ── MODULE NAVIGATION ──
   function openModule(idx) {
-    const screenMap = {0:'module1',1:'module2',2:'module3',3:'module4',4:'module5',
-                       5:'module6',6:'module7',7:'module8',8:'module9'};
-    if (screenMap[idx]) { show(screenMap[idx]); return; }
+    var screenMap = {
+      0:"module1", 1:"module2", 2:"module3", 3:"module4", 4:"module5",
+      5:"module6", 6:"module7", 7:"module8", 8:"module9"
+    };
+    if (screenMap[idx]) show(screenMap[idx]);
   }
 
-  function backToMain() { show('main'); }
-
   function toggleLesson(id) {
-    const body = document.getElementById(id);
-    const arrow = document.getElementById('arrow-' + id);
-    if (body) body.classList.toggle('open');
-    if (arrow) arrow.classList.toggle('open');
+    var body = document.getElementById(id);
+    var arrow = document.getElementById("arrow-" + id);
+    if (body) body.classList.toggle("open");
+    if (arrow) arrow.classList.toggle("open");
   }
 
   function togglePlay() {
-    const icon = document.getElementById('play-icon');
-    isPlaying = !isPlaying;
-    if (isPlaying) {
-      icon.className = 'pause-icon';
-      icon.innerHTML = '<div class="pause-bar"></div><div class="pause-bar"></div>';
-      document.getElementById('video-label').textContent = 'Reproduciendo...';
+    var icon = document.getElementById("play-icon");
+    if (!icon) return;
+    if (icon.dataset.playing) {
+      delete icon.dataset.playing;
+      icon.className = "play-icon";
+      icon.innerHTML = "";
     } else {
-      icon.className = 'play-icon';
-      icon.innerHTML = '';
-      document.getElementById('video-label').textContent = 'Haz clic para continuar';
+      icon.dataset.playing = "1";
+      icon.className = "pause-icon";
+      icon.innerHTML = "<div class=\"pause-bar\"></div><div class=\"pause-bar\"></div>";
     }
   }
 
   function togglePlayM(id) {
-    const btn = document.getElementById(id);
+    var btn = document.getElementById(id);
     if (!btn) return;
-    const icon = btn.querySelector('.play-icon, .pause-icon');
+    var icon = btn.querySelector(".play-icon, .pause-icon");
     if (!icon) return;
     if (btn.dataset.playing) {
       delete btn.dataset.playing;
-      icon.className = 'play-icon';
-      icon.innerHTML = '';
+      icon.className = "play-icon";
+      icon.innerHTML = "";
     } else {
-      btn.dataset.playing = '1';
-      icon.className = 'pause-icon';
-      icon.innerHTML = '<div class="pause-bar"></div><div class="pause-bar"></div>';
+      btn.dataset.playing = "1";
+      icon.className = "pause-icon";
+      icon.innerHTML = "<div class=\"pause-bar\"></div><div class=\"pause-bar\"></div>";
     }
   }
 
-  // ── MEDALS ──
-  const medalDefs = [
+  // ── MEDALS & PROGRESS ──
+  var medalDefs = [
     { id:"m0", label:"Onboarding", icon:"🚀", bg:"#FEF5DC", pts:50 },
-    { id:"mg", label:"Guión IUL", icon:"💬", bg:"#E8F0FE", pts:100 },
+    { id:"mg", label:"Guion IUL", icon:"💬", bg:"#E8F0FE", pts:100 },
     { id:"mcalls", label:"Llamadas", icon:"🎧", bg:"#E8F5EE", pts:100 },
     { id:"millus", label:"Ilustraciones", icon:"🎨", bg:"#FEF5DC", pts:150 },
     { id:"mexpand", label:"Expande", icon:"🌎", bg:"#E8F8F5", pts:100 },
@@ -2461,79 +2390,73 @@
     { id:"mplatforms", label:"Plataformas", icon:"⚡", bg:"#F0E8FE", pts:150 },
     { id:"mcrankwheel", label:"CrankWheel", icon:"⚡", bg:"#E8F0FE", pts:100 },
     { id:"mobjections", label:"Objeciones", icon:"🗣️", bg:"#FEF5DC", pts:100 },
-    { id:"m1", label:"Módulo 1", icon:"📋", bg:"#E8F5EE", pts:100 },
-    { id:"m2", label:"Módulo 2", icon:"💼", bg:"#FEF5DC", pts:100 },
-    { id:"m3", label:"Módulo 3", icon:"🎯", bg:"#E8F5EE", pts:100 },
-    { id:"m4", label:"Módulo 4", icon:"📊", bg:"#FEF5DC", pts:100 },
-    { id:"m5", label:"Módulo 5", icon:"🏆", bg:"#E8F5EE", pts:150 },
-    { id:"m6", label:"Módulo 6", icon:"🧠", bg:"#E8F0FE", pts:150 },
-    { id:"m7", label:"Módulo 7", icon:"📈", bg:"#FEECE8", pts:150 },
-    { id:"m8", label:"Módulo 8", icon:"📅", bg:"#F0E8FE", pts:150 },
-    { id:"m9", label:"Módulo 9", icon:"🛠️", bg:"#E8F8F5", pts:200 },
+    { id:"m1", label:"Modulo 1", icon:"📋", bg:"#E8F5EE", pts:100 },
+    { id:"m2", label:"Modulo 2", icon:"💼", bg:"#FEF5DC", pts:100 },
+    { id:"m3", label:"Modulo 3", icon:"🎯", bg:"#E8F5EE", pts:100 },
+    { id:"m4", label:"Modulo 4", icon:"📊", bg:"#FEF5DC", pts:100 },
+    { id:"m5", label:"Modulo 5", icon:"🏆", bg:"#E8F5EE", pts:150 },
+    { id:"m6", label:"Modulo 6", icon:"🧠", bg:"#E8F0FE", pts:150 },
+    { id:"m7", label:"Modulo 7", icon:"📈", bg:"#FEECE8", pts:150 },
+    { id:"m8", label:"Modulo 8", icon:"📅", bg:"#F0E8FE", pts:150 },
+    { id:"m9", label:"Modulo 9", icon:"🛠️", bg:"#E8F8F5", pts:200 }
   ];
 
   function markModuleDone(moduleId) {
-    const prog = loadProgress();
-    prog[moduleId] = 'done';
-    saveProgress(prog);
+    userProgress[moduleId] = "done";
     renderMedals();
   }
 
   function renderMedals() {
-    const prog = loadProgress();
-    const row = document.getElementById('medals-row');
+    var row = document.getElementById("medals-row");
     if (!row) return;
-    let totalPts = 0, earned = 0;
-    row.innerHTML = '';
-    medalDefs.forEach(m => {
-      const isEarned = prog[m.id] === 'done';
+    var totalPts = 0, earned = 0;
+    row.innerHTML = "";
+    medalDefs.forEach(function(m) {
+      var isEarned = userProgress[m.id] === "done";
       if (isEarned) { totalPts += m.pts; earned++; }
-      const div = document.createElement('div');
-      div.className = 'medal-item';
-      div.innerHTML = '<div class="medal-icon ' + (isEarned ? 'earned' : 'locked') + '" style="background:' + m.bg + ';">' + m.icon + '</div>'
-        + '<div class="medal-label">' + m.label + '</div>';
+      var div = document.createElement("div");
+      div.className = "medal-item";
+      div.innerHTML = "<div class=\"medal-icon " + (isEarned ? "earned" : "locked") + "\" style=\"background:" + m.bg + ";\">" + m.icon + "</div>"
+        + "<div class=\"medal-label\">" + m.label + "</div>";
       row.appendChild(div);
-    });
-    const ptsEl = document.getElementById('total-pts');
-    const barEl = document.getElementById('medals-bar');
-    const mpf = document.getElementById('main-progress-fill');
-    const cc = document.getElementById('completed-count');
-    if (ptsEl) ptsEl.textContent = totalPts + ' pts';
-    if (barEl) barEl.style.width = (earned / medalDefs.length * 100) + '%';
-    if (mpf) mpf.style.width = (earned / medalDefs.length * 100) + '%';
-    if (cc) cc.textContent = earned;
-    medalDefs.forEach((m) => {
-      const card = document.getElementById('mod-card-' + m.id);
-      const badge = document.getElementById('mod-badge-' + m.id);
-      const bar = document.getElementById('mod-bar-' + m.id);
-      if (!card) return;
-      if (prog[m.id] === 'done') {
-        card.classList.add('completed');
-        if (badge) { badge.className = 'badge-completed'; badge.textContent = '✓ Completado'; }
-        if (bar) bar.style.width = '100%';
+      var card = document.getElementById("mod-card-" + m.id);
+      var badge = document.getElementById("mod-badge-" + m.id);
+      var bar = document.getElementById("mod-bar-" + m.id);
+      if (isEarned) {
+        if (card) card.classList.add("completed");
+        if (badge) { badge.className = "badge-completed"; badge.textContent = "Completado"; }
+        if (bar) bar.style.width = "100%";
       }
     });
+    var ptsEl = document.getElementById("total-pts");
+    var barEl = document.getElementById("medals-bar");
+    var mpf = document.getElementById("main-progress-fill");
+    var cc = document.getElementById("completed-count");
+    if (ptsEl) ptsEl.textContent = totalPts + " pts";
+    if (barEl) barEl.style.width = (earned / medalDefs.length * 100) + "%";
+    if (mpf) mpf.style.width = (earned / medalDefs.length * 100) + "%";
+    if (cc) cc.textContent = earned;
   }
 
   // ── DISC QUIZ ──
-  const discQuestions = [
-    { section: "Perfil de comportamiento DISC", q: "Cuando tienes una meta clara, ¿cómo actúas?", opts: [
+  var discQuestions = [
+    { section: "Perfil de comportamiento DISC", q: "Cuando tienes una meta clara, como actuas?", opts: [
       { l:"A", t:"Voy directo a ella sin esperar permiso de nadie", p:"D" },
-      { l:"B", t:"Hablo con otros para motivarme y arrancar con energía", p:"I" },
+      { l:"B", t:"Hablo con otros para motivarme y arrancar con energia", p:"I" },
       { l:"C", t:"Planeo bien antes de dar el primer paso", p:"S" },
       { l:"D", t:"Analizo todos los riesgos posibles primero", p:"C" }
     ]},
-    { section: null, q: 'Si un prospecto te dice "no me interesa" al teléfono, ¿qué haces?', opts: [
-      { l:"A", t:"Busco otro ángulo de inmediato y vuelvo a intentarlo", p:"D" },
-      { l:"B", t:"Construyo más conexión y le llamo en otro momento", p:"I" },
+    { section: null, q: "Si un prospecto te dice que no le interesa al telefono, que haces?", opts: [
+      { l:"A", t:"Busco otro angulo de inmediato y vuelvo a intentarlo", p:"D" },
+      { l:"B", t:"Construyo mas conexion y le llamo en otro momento", p:"I" },
       { l:"C", t:"Le digo que lo piense y espero a que me llame", p:"S" },
-      { l:"D", t:"Reviso mi presentación para mejorar la próxima vez", p:"C" }
+      { l:"D", t:"Reviso mi presentacion para mejorar la proxima vez", p:"C" }
     ]},
-    { section: null, q: "¿Cómo te describirías en tu forma natural de ser?", opts: [
+    { section: null, q: "Como te describirias en tu forma natural de ser?", opts: [
       { l:"A", t:"Directo, competitivo y enfocado en resultados", p:"D" },
       { l:"B", t:"Sociable, entusiasta y convincente con las personas", p:"I" },
       { l:"C", t:"Paciente, constante y buen escucha", p:"S" },
-      { l:"D", t:"Preciso, detallista y metódico", p:"C" }
+      { l:"D", t:"Preciso, detallista y metodico", p:"C" }
     ]},
     { section: null, q: "En un trabajo nuevo, lo primero que haces es:", opts: [
       { l:"A", t:"Empezar a generar resultados lo antes posible", p:"D" },
@@ -2541,45 +2464,45 @@
       { l:"C", t:"Aprender bien el proceso antes de actuar", p:"S" },
       { l:"D", t:"Estudiar todos los materiales disponibles a fondo", p:"C" }
     ]},
-    { section: "Motivación y hambre de éxito", q: "¿Por qué decidiste ser agente de seguros de vida?", opts: [
+    { section: "Motivacion y hambre de exito", q: "Por que decidiste ser agente de seguros de vida?", opts: [
       { l:"A", t:"Quiero ingresos ilimitados y trabajar de manera independiente", p:"D" },
       { l:"B", t:"Me apasiona proteger familias y generar ingresos haciendo algo significativo", p:"I" },
       { l:"C", t:"Busco flexibilidad y un ingreso adicional a lo que ya hago", p:"S" },
-      { l:"D", t:"Alguien me lo recomendó y estoy explorando si es para mí", p:"C" }
+      { l:"D", t:"Alguien me lo recomendo y estoy explorando si es para mi", p:"C" }
     ]},
-    { section: null, q: "Si en tu primer mes no ganas nada, ¿qué haces?", opts: [
-      { l:"A", t:"Identifico qué estoy haciendo mal y lo corrijo de inmediato", p:"D" },
+    { section: null, q: "Si en tu primer mes no ganas nada, que haces?", opts: [
+      { l:"A", t:"Identifico que estoy haciendo mal y lo corrijo de inmediato", p:"D" },
       { l:"B", t:"Pido ayuda a mi mentor y doblo el esfuerzo", p:"I" },
-      { l:"C", t:"Le doy más tiempo, quizás el siguiente mes mejora solo", p:"S" },
-      { l:"D", t:"Empiezo a considerar si este negocio es para mí", p:"C" }
+      { l:"C", t:"Le doy mas tiempo, quizas el siguiente mes mejora solo", p:"S" },
+      { l:"D", t:"Empiezo a considerar si este negocio es para mi", p:"C" }
     ]},
-    { section: null, q: "¿Has vendido algo antes y lograste convencer a alguien de comprarte?", opts: [
-      { l:"A", t:"Sí, tengo experiencia real en ventas y me gusta el proceso", p:"D" },
-      { l:"B", t:"Informalmente sí, pero sin entrenamiento formal", p:"I" },
+    { section: null, q: "Has vendido algo antes y lograste convencer a alguien de comprarte?", opts: [
+      { l:"A", t:"Si, tengo experiencia real en ventas y me gusta el proceso", p:"D" },
+      { l:"B", t:"Informalmente si, pero sin entrenamiento formal", p:"I" },
       { l:"C", t:"No, pero estoy convencido/a de que puedo aprenderlo", p:"S" },
-      { l:"D", t:"No — y las ventas me generan algo de inseguridad", p:"C" }
+      { l:"D", t:"No y las ventas me generan algo de inseguridad", p:"C" }
     ]},
-    { section: "Compromiso real", q: "¿Cuántas horas semanales estás dispuesto/a a dedicarle a este negocio al inicio?", opts: [
+    { section: "Compromiso real", q: "Cuantas horas semanales estas dispuesto/a a dedicarle a este negocio al inicio?", opts: [
       { l:"A", t:"Todo el tiempo que sea necesario. Este es mi full time", p:"D" },
-      { l:"B", t:"Mínimo 20 horas semanales (mínimo un part time)", p:"I" },
-      { l:"C", t:"Menos de 20 horas semanales — es lo que puedo ahora", p:"S" },
-      { l:"D", t:"Lo que se pueda según mis otras actividades", p:"C" }
+      { l:"B", t:"Minimo 20 horas semanales", p:"I" },
+      { l:"C", t:"Menos de 20 horas semanales", p:"S" },
+      { l:"D", t:"Lo que se pueda segun mis otras actividades", p:"C" }
     ]},
-    { section: null, q: "¿Estás dispuesto/a a asistir a los entrenamientos aunque el horario no sea conveniente?", opts: [
-      { l:"A", t:"Sí — el entrenamiento es parte fundamental del proceso", p:"D" },
-      { l:"B", t:"En su mayoría sí, pero depende un poco del horario", p:"I" },
-      { l:"C", t:"Preferiría acceder solo a grabaciones cuando pueda", p:"S" },
+    { section: null, q: "Estas dispuesto/a a asistir a los entrenamientos aunque el horario no sea conveniente?", opts: [
+      { l:"A", t:"Si, el entrenamiento es parte fundamental del proceso", p:"D" },
+      { l:"B", t:"En su mayoria si, pero depende un poco del horario", p:"I" },
+      { l:"C", t:"Preferiria acceder solo a grabaciones cuando pueda", p:"S" },
       { l:"D", t:"No puedo comprometerme a horarios fijos ahora mismo", p:"C" }
     ]},
-    { section: null, q: "¿Estás dispuesto/a a invertir en leads para tu negocio una vez terminado el entrenamiento?", opts: [
-      { l:"A", t:"Sí — entiendo que es necesario para generar ventas", p:"D" },
-      { l:"B", t:"Sí, siempre que entienda bien el retorno esperado", p:"I" },
-      { l:"C", t:"Me gustaría que la empresa cubriera esos costos", p:"S" },
+    { section: null, q: "Estas dispuesto/a a invertir en leads para tu negocio una vez terminado el entrenamiento?", opts: [
+      { l:"A", t:"Si, entiendo que es necesario para generar ventas", p:"D" },
+      { l:"B", t:"Si, siempre que entienda bien el retorno esperado", p:"I" },
+      { l:"C", t:"Me gustaria que la empresa cubriera esos costos", p:"S" },
       { l:"D", t:"No tengo presupuesto para invertir en este momento", p:"C" }
     ]}
   ];
 
-  let discCurrent = 0, discAnswers = [], discSelected = null;
+  var discCurrent = 0, discAnswers = [], discSelected = null;
 
   function startDisc() {
     discCurrent = 0; discAnswers = []; discSelected = null;
@@ -2588,31 +2511,40 @@
   }
 
   function renderDiscQuestion() {
-    const q = discQuestions[discCurrent];
-    const pct = ((discCurrent + 1) / discQuestions.length * 100).toFixed(0);
+    var q = discQuestions[discCurrent];
+    var pct = ((discCurrent + 1) / discQuestions.length * 100).toFixed(0);
     document.getElementById("disc-progress").style.width = pct + "%";
     discSelected = null;
-    const isLast = discCurrent === discQuestions.length - 1;
-    document.getElementById("disc-next-btn").textContent = isLast ? "Ver mi resultado →" : "Continuar →";
-    let sectionHtml = q.section ? '<div class="disc-section-label">' + q.section + '</div>' : "";
+    var isLast = discCurrent === discQuestions.length - 1;
+    document.getElementById("disc-next-btn").textContent = isLast ? "Ver mi resultado" : "Continuar";
+    var sectionHtml = q.section ? "<div class=\"disc-section-label\">" + q.section + "</div>" : "";
+    var optsHtml = "";
+    for (var i = 0; i < q.opts.length; i++) {
+      optsHtml += "<div class=\"disc-option\" id=\"disc-opt-" + i + "\" onclick=\"selectDiscOpt(" + i + ",'" + q.opts[i].p + "')\">"
+        + "<div class=\"disc-letter\">" + q.opts[i].l + "</div>"
+        + "<div class=\"disc-option-text\">" + q.opts[i].t + "</div></div>";
+    }
     document.getElementById("disc-body").innerHTML =
-      '<div class="disc-badge">Pregunta ' + (discCurrent+1) + ' de ' + discQuestions.length + '</div>'
+      "<div class=\"disc-badge\">Pregunta " + (discCurrent+1) + " de " + discQuestions.length + "</div>"
       + sectionHtml
-      + '<div class="disc-question">' + q.q + '</div>'
-      + q.opts.map((o,i) => '<div class="disc-option" id="disc-opt-' + i + '" onclick="selectDiscOpt(' + i + ','' + o.p + '')">'
-        + '<div class="disc-letter">' + o.l + '</div>'
-        + '<div class="disc-option-text">' + o.t + '</div></div>').join('')
-      + '<div id="disc-err" style="min-height:16px;font-size:12px;color:#E24B4A;margin-top:6px;text-align:center;"></div>';
+      + "<div class=\"disc-question\">" + q.q + "</div>"
+      + optsHtml
+      + "<div id=\"disc-err\" style=\"min-height:16px;font-size:12px;color:#E24B4A;margin-top:6px;text-align:center;\"></div>";
   }
 
   function selectDiscOpt(idx, profile) {
-    document.querySelectorAll(".disc-option").forEach(o => o.classList.remove("selected"));
-    document.getElementById("disc-opt-" + idx).classList.add("selected");
+    document.querySelectorAll(".disc-option").forEach(function(o) { o.classList.remove("selected"); });
+    var el = document.getElementById("disc-opt-" + idx);
+    if (el) el.classList.add("selected");
     discSelected = profile;
   }
 
   function discNext() {
-    if (!discSelected) { document.getElementById("disc-err").textContent = "Por favor selecciona una respuesta."; return; }
+    if (!discSelected) {
+      var err = document.getElementById("disc-err");
+      if (err) err.textContent = "Por favor selecciona una respuesta.";
+      return;
+    }
     discAnswers.push(discSelected);
     if (discCurrent < discQuestions.length - 1) {
       discCurrent++;
@@ -2624,146 +2556,106 @@
   }
 
   function showDiscResult() {
-    const counts = {D:0,I:0,S:0,C:0};
-    discAnswers.forEach(a => counts[a]++);
-    const top = Object.keys(counts).sort((a,b) => counts[b]-counts[a])[0];
-    const profiles = {
-      D: { name:"Dominante — El Líder Nato", emoji:"🦁", desc:"Eres directo, orientado a resultados y no temes el rechazo.", tip:"Tu reto: trabaja la escucha activa. Tu fortaleza es cerrar — úsala." },
-      I: { name:"Influyente — El Conector", emoji:"⭐", desc:"Eres sociable y tienes el don de conectar con las personas.", tip:"Tu reto: la constancia y el seguimiento. Tu energía es tu mayor activo." },
-      S: { name:"Estable — El Asesor de Confianza", emoji:"🌿", desc:"Eres paciente, empático y confiable. Construyes relaciones sólidas.", tip:"Tu reto: aprender a cerrar con más firmeza." },
-      C: { name:"Concienzudo — El Experto", emoji:"🔬", desc:"Eres detallista, analítico y muy bien preparado.", tip:"Tu reto: no sobre-analices — actúa." }
+    var counts = {D:0, I:0, S:0, C:0};
+    discAnswers.forEach(function(a) { counts[a]++; });
+    var top = Object.keys(counts).sort(function(a,b) { return counts[b]-counts[a]; })[0];
+    var profiles = {
+      D: { name:"Dominante - El Lider Nato", emoji:"🦁", desc:"Eres directo, orientado a resultados y no temes el rechazo.", tip:"Tu reto: trabaja la escucha activa. Tu fortaleza es cerrar, usala." },
+      I: { name:"Influyente - El Conector", emoji:"⭐", desc:"Eres sociable y tienes el don de conectar con las personas.", tip:"Tu reto: la constancia y el seguimiento." },
+      S: { name:"Estable - El Asesor de Confianza", emoji:"🌿", desc:"Eres paciente, empatico y confiable. Construyes relaciones solidas.", tip:"Tu reto: aprender a cerrar con mas firmeza." },
+      C: { name:"Concienzudo - El Experto", emoji:"🔬", desc:"Eres detallista, analitico y muy bien preparado.", tip:"Tu reto: no sobre-analices, actua." }
     };
-    const p = profiles[top];
+    var p = profiles[top];
     document.getElementById("disc-body").innerHTML =
-      '<div style="text-align:center;margin-bottom:1.5rem;">'
-      + '<div style="font-size:48px;margin-bottom:0.5rem;">' + p.emoji + '</div>'
-      + '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;">Tu perfil como agente</div>'
-      + '<div style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:#0A1628;">' + p.name + '</div></div>'
-      + '<div style="background:#fff;border-radius:16px;padding:1.25rem;margin-bottom:1rem;"><p style="font-size:14px;color:#444;line-height:1.7;">' + p.desc + '</p></div>'
-      + '<div style="background:#0A1628;border-radius:16px;padding:1.25rem;margin-bottom:1rem;">'
-      + '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#F0C040;font-weight:700;margin-bottom:6px;">💡 Tu enfoque en el equipo</div>'
-      + '<p style="font-size:13px;color:rgba(255,255,255,0.8);line-height:1.7;">' + p.tip + '</p></div>'
-      + '<div style="background:#E8F5EE;border-radius:16px;padding:1.25rem;text-align:center;">'
-      + '<div style="font-size:13px;color:#1A4A2E;font-weight:700;margin-bottom:6px;">¿Listo/a para comenzar?</div>'
-      + '<div style="font-size:13px;color:#555;line-height:1.6;">Ingresa tu <strong>código de acceso</strong> para entrar al sistema de entrenamiento.</div></div>';
-    document.getElementById("disc-next-btn").textContent = "Ingresar a la academia →";
+      "<div style=\"text-align:center;margin-bottom:1.5rem;\">"
+      + "<div style=\"font-size:48px;margin-bottom:0.5rem;\">" + p.emoji + "</div>"
+      + "<div style=\"font-size:22px;font-weight:700;color:#0A1628;\">" + p.name + "</div></div>"
+      + "<div style=\"background:#fff;border-radius:16px;padding:1.25rem;margin-bottom:1rem;\"><p style=\"font-size:14px;color:#444;line-height:1.7;\">" + p.desc + "</p></div>"
+      + "<div style=\"background:#0A1628;border-radius:16px;padding:1.25rem;margin-bottom:1rem;\">"
+      + "<div style=\"font-size:10px;color:#F0C040;font-weight:700;margin-bottom:6px;\">Tu enfoque en el equipo</div>"
+      + "<p style=\"font-size:13px;color:rgba(255,255,255,0.8);line-height:1.7;\">" + p.tip + "</p></div>"
+      + "<div style=\"background:#E8F5EE;border-radius:16px;padding:1.25rem;text-align:center;\">"
+      + "<div style=\"font-size:13px;color:#1A4A2E;font-weight:700;\">Ingresa tu codigo de acceso para continuar</div></div>";
+    document.getElementById("disc-next-btn").textContent = "Ingresar a la academia";
     document.getElementById("disc-next-btn").onclick = function() { goStep3(); };
     document.getElementById("disc-progress").style.width = "100%";
     window.scrollTo(0,0);
   }
 
   // ── REGISTRATION ──
-  var regData = { name:'', phone:'', email:'', state:'', exp:'', lic:'' };
+  var regData = { name:"", phone:"", email:"", state:"", exp:"", lic:"" };
 
   function selectOption(group, el, val) {
-    const parent = el.parentElement;
-    parent.querySelectorAll('.reg-option').forEach(o => o.classList.remove('selected'));
-    el.classList.add('selected');
+    var parent = el.parentElement;
+    parent.querySelectorAll(".reg-option").forEach(function(o) { o.classList.remove("selected"); });
+    el.classList.add("selected");
     regData[group] = val;
   }
 
   function goStep2() {
-    const name = document.getElementById('reg-name').value.trim();
-    const phone = document.getElementById('reg-phone').value.trim();
-    const email = document.getElementById('reg-email').value.trim();
-    const state = document.getElementById('reg-state').value.trim();
-    const err = document.getElementById('reg-error');
-    if (!name || !phone || !email || !state) { err.textContent = 'Por favor completa todos los campos.'; return; }
-    if (!regData.exp) { err.textContent = 'Selecciona tu experiencia en seguros.'; return; }
-    if (!regData.lic) { err.textContent = 'Indica si tienes licencia de seguros.'; return; }
-    err.textContent = '';
+    var name = document.getElementById("reg-name").value.trim();
+    var phone = document.getElementById("reg-phone").value.trim();
+    var email = document.getElementById("reg-email").value.trim();
+    var state = document.getElementById("reg-state").value.trim();
+    var err = document.getElementById("reg-error");
+    if (!name || !phone || !email || !state) { err.textContent = "Por favor completa todos los campos."; return; }
+    if (!regData.exp) { err.textContent = "Selecciona tu experiencia en seguros."; return; }
+    if (!regData.lic) { err.textContent = "Indica si tienes licencia de seguros."; return; }
+    err.textContent = "";
     regData.name = name; regData.phone = phone; regData.email = email; regData.state = state;
-    if (regData.lic === 'si') {
-      startDisc(); return;
-    }
-    const content = document.getElementById('step2-content');
-    const title = document.getElementById('step2-title');
-    title.textContent = '¿No tienes licencia de seguros?';
-    content.innerHTML = '<div style="background:#0A1628;border-radius:16px;padding:1.5rem;text-align:center;margin-bottom:1rem;">'
-      + '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">MENSAJE ESPECIAL PARA TI</div>'
-      + '<div style="font-family:serif;font-size:20px;color:#F0C040;font-weight:700;text-transform:uppercase;">' + name.toUpperCase() + '</div>'
-      + '<div style="font-size:12px;color:rgba(255,255,255,0.6);font-style:italic;margin-top:4px;">Profesional Financiera</div></div>'
-      + '<div style="background:#fff;border-radius:16px;padding:1.25rem;">'
-      + '<div style="font-size:14px;font-weight:700;color:#0A1628;text-align:center;margin-bottom:6px;">Tenemos <span style="color:#C8920A;">2 opciones</span> para ayudarte a obtenerla.</div>'
-      + '<p style="font-size:13px;color:#555;margin-top:0.75rem;">Contáctate con <strong style="color:#1A4A2E;">Elizabet Jiménez</strong> para obtener tu código de acceso una vez tengas tu licencia.</p></div>';
-    show('register2');
+    if (regData.lic === "si") { startDisc(); return; }
+    var content = document.getElementById("step2-content");
+    var title = document.getElementById("step2-title");
+    if (title) title.textContent = "No tienes licencia de seguros?";
+    if (content) content.innerHTML = "<div style=\"background:#0A1628;border-radius:16px;padding:1.5rem;text-align:center;\">"
+      + "<div style=\"font-size:20px;font-weight:700;color:#F0C040;\">" + name.toUpperCase() + "</div></div>"
+      + "<div style=\"background:#fff;border-radius:16px;padding:1.25rem;margin-top:1rem;\">"
+      + "<p style=\"font-size:13px;color:#555;\">Contactate con Elizabet Jimenez para obtener tu codigo de acceso una vez tengas tu licencia.</p></div>";
+    show("register2");
   }
 
   function goStep3() {
-    const el = document.getElementById('step3-name');
-    if (el) el.textContent = '¡Bienvenida, ' + (regData.name || '').split(' ')[0] + '!';
-    show('register3');
+    var el = document.getElementById("step3-name");
+    if (el) el.textContent = "Bienvenida, " + (regData.name || "").split(" ")[0] + "!";
+    show("register3");
   }
 
   function finalLogin() {
-    const val = document.getElementById('step3-code').value.trim().toUpperCase();
-    const err = document.getElementById('step3-error');
+    var val = document.getElementById("step3-code").value.trim().toUpperCase();
+    var err = document.getElementById("step3-error");
     if (val === CORRECT_CODE) {
-      const name = regData.name || 'Estudiante';
-      localStorage.setItem('gt_current_user', name);
-      const welcomeEl = document.querySelector('.welcome-name');
-      if (welcomeEl) welcomeEl.textContent = name;
-      show('main');
+      currentUser = regData.name || "Agente";
+      var welcomeEl = document.querySelector(".welcome-name");
+      if (welcomeEl) welcomeEl.textContent = currentUser;
+      show("main");
     } else {
-      err.textContent = 'Código incorrecto. Inténtalo de nuevo.';
-      document.getElementById('step3-code').style.borderColor = '#E24B4A';
-      setTimeout(() => { document.getElementById('step3-code').style.borderColor = ''; }, 1500);
+      if (err) err.textContent = "Codigo incorrecto. Intentalo de nuevo.";
     }
   }
 
   // ── SCHEDULE TABS ──
   function switchTab(tab) {
-    document.getElementById('tab-new').style.display = tab === 'new' ? 'block' : 'none';
-    document.getElementById('tab-old').style.display = tab === 'old' ? 'block' : 'none';
-    document.getElementById('tab-btn-new').className = 'sched-tab' + (tab === 'new' ? ' active' : '');
-    document.getElementById('tab-btn-old').className = 'sched-tab' + (tab === 'old' ? ' active' : '');
+    document.getElementById("tab-new").style.display = tab === "new" ? "block" : "none";
+    document.getElementById("tab-old").style.display = tab === "old" ? "block" : "none";
+    document.getElementById("tab-btn-new").className = "sched-tab" + (tab === "new" ? " active" : "");
+    document.getElementById("tab-btn-old").className = "sched-tab" + (tab === "old" ? " active" : "");
   }
 
-  // ── ADMIN PROGRESS VIEW ──
+  // ── ADMIN PROGRESS ──
   function showProgressAdmin() {
-    const users = getAllUsersProgress();
-    const totalModules = medalDefs.length;
-    const body = document.getElementById('progress-admin-body');
-    if (users.length === 0) {
-      body.innerHTML = '<div style="text-align:center;padding:2rem;color:#888;font-size:14px;">Aún no hay progreso registrado.</div>';
-    } else {
-      body.innerHTML = '<div style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#C8920A;font-weight:700;margin-bottom:0.75rem;">Agentes con actividad</div>'
-        + users.map(u => {
-          const pct = Math.round(u.completed / totalModules * 100);
-          const prog = JSON.parse(localStorage.getItem(u.key) || '{}');
-          const completedMods = medalDefs.filter(m => prog[m.id] === 'done').map(m => m.icon + ' ' + m.label);
-          return '<div style="background:#F7F5F0;border-radius:10px;padding:12px 14px;margin-bottom:8px;">'
-            + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
-            + '<div style="font-size:14px;font-weight:700;color:#1A4A2E;text-transform:capitalize;">' + u.name + '</div>'
-            + '<div style="font-size:12px;font-weight:700;color:#C8920A;">' + u.completed + '/' + totalModules + ' · ' + pct + '%</div></div>'
-            + '<div style="background:#E8E4D9;border-radius:6px;height:5px;margin-bottom:8px;">'
-            + '<div style="background:linear-gradient(to right,#1A4A2E,#C8920A);height:5px;border-radius:6px;width:' + pct + '%;"></div></div>'
-            + (completedMods.length > 0 ? '<div style="font-size:11px;color:#666;">' + completedMods.join(' · ') + '</div>'
-              : '<div style="font-size:11px;color:#AAA;">Sin módulos completados aún</div>')
-            + '</div>';
-        }).join('');
-    }
-    document.getElementById('progress-modal').style.display = 'flex';
+    var body = document.getElementById("progress-admin-body");
+    var modal = document.getElementById("progress-modal");
+    if (!body || !modal) return;
+    var earned = Object.values(userProgress).filter(function(v) { return v === "done"; }).length;
+    body.innerHTML = "<div style=\"padding:1rem;\"><div style=\"font-size:14px;font-weight:700;color:#1A4A2E;margin-bottom:8px;\">" + (currentUser || "Sin usuario") + "</div>"
+      + "<div style=\"font-size:13px;color:#666;\">" + earned + " de " + medalDefs.length + " modulos completados</div></div>";
+    modal.style.display = "flex";
   }
 
   function closeProgressModal() {
-    document.getElementById('progress-modal').style.display = 'none';
+    var modal = document.getElementById("progress-modal");
+    if (modal) modal.style.display = "none";
   }
-
-  // ── AUTO LOGIN ──
-  window.addEventListener('load', function() {
-    const currentUser = localStorage.getItem('gt_current_user');
-    if (currentUser) {
-      const el = document.querySelector('.welcome-name');
-      if (el) el.textContent = currentUser;
-      show('main');
-    }
-    // Close progress modal on outside click
-    const modal = document.getElementById('progress-modal');
-    if (modal) modal.addEventListener('click', function(e) {
-      if (e.target === this) closeProgressModal();
-    });
-  });
 </script>
 
 <!-- ══ REGISTER STEP 1 ══ -->
