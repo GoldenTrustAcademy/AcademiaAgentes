@@ -2,111 +2,279 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <script>if(sessionStorage.getItem("gt_academy_access")!=="granted"){window.location.href="index.html";}</script>
+  <script>if(sessionStorage.getItem('gt_academy_access')!=='granted'){window.location.href='index.html';}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Golden Trust Academy</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --green-deep:#0d2b1a; --green-mid:#14401f; --green-card:#1c4a2a;
+      --gold:#c9a227; --gold-light:#e2b84a; --gold-pale:#f0d485; --gold-dim:#8a6e1a;
+      --cream:#faf7ee; --cream-dark:#ede8d6; --white:#ffffff;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:#1a1a14;min-height:100vh;}
+
+    /* HEADER */
+    .header{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green-mid) 60%,#1a5229 100%);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(201,162,39,0.2);}
+    .header-inner{max-width:1200px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+    .logo-area{display:flex;align-items:center;gap:14px;}
+    .logo-img{width:50px;height:50px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;object-position:top;}
+    .logo-texts{display:flex;flex-direction:column;line-height:1.25;}
+    .logo-eyebrow{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.42);}
+    .logo-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--gold-light);}
+    .logo-sub{font-size:11px;color:rgba(255,255,255,0.38);margin-top:1px;}
+    .logo-sub span{color:var(--gold-light);}
+    .header-progress{text-align:right;}
+    .prog-label{font-size:11px;color:rgba(255,255,255,0.42);margin-bottom:6px;}
+    .prog-track{width:160px;height:5px;background:rgba(255,255,255,0.12);border-radius:99px;overflow:hidden;margin-left:auto;}
+    .prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold-light));border-radius:99px;width:0%;transition:width 0.7s ease;}
+    .prog-pct{font-size:11px;color:var(--gold);margin-top:5px;}
+
+    /* MEDALS */
+    .medals-bar{background:var(--white);border-bottom:1px solid var(--cream-dark);}
+    .medals-inner{max-width:1200px;margin:0 auto;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+    .medals-left h3{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--green-deep);}
+    .medals-left p{font-size:11px;color:#888;margin-top:3px;}
+    .medals-pts{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--gold);white-space:nowrap;}
+    .medals-row{max-width:1200px;margin:0 auto;padding:0 32px 20px;display:flex;gap:8px;flex-wrap:wrap;}
+    .medal{width:38px;height:38px;border-radius:50%;background:#f5f0e8;border:2px solid var(--cream-dark);display:flex;align-items:center;justify-content:center;font-size:14px;opacity:0.28;transition:all 0.35s;}
+    .medal.earned{background:linear-gradient(135deg,var(--gold-dim),var(--gold-light));border-color:var(--gold);opacity:1;animation:pop 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+    @keyframes pop{from{transform:scale(0.4);opacity:0;}to{transform:scale(1);opacity:1;}}
+
+    /* SECTION */
+    .section-wrap{max-width:1200px;margin:0 auto;padding:36px 32px 20px;}
+    .section-label{display:flex;align-items:center;gap:16px;}
+    .label-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}
+    .label-text{font-size:10px;letter-spacing:0.24em;font-weight:600;color:var(--gold-dim);white-space:nowrap;}
+
+    /* GRID */
+    .modules-wrap{max-width:1200px;margin:0 auto;padding:0 32px 80px;}
+    .modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+
+    /* CARD */
+    .card{background:var(--white);border-radius:16px;border:1.5px solid var(--cream-dark);overflow:hidden;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.05);transition:transform 0.25s,box-shadow 0.25s,border-color 0.25s;}
+    .card:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(0,0,0,0.11),0 4px 16px rgba(201,162,39,0.12);border-color:var(--gold);}
+    .card.done{border-color:var(--gold);box-shadow:0 4px 18px rgba(201,162,39,0.18);}
+    .card-thumb{height:112px;background:linear-gradient(135deg,var(--green-deep),var(--green-card));position:relative;display:flex;align-items:center;justify-content:center;padding:14px;overflow:hidden;}
+    .card-num-badge{position:absolute;top:10px;left:11px;background:rgba(255,255,255,0.13);color:rgba(255,255,255,0.92);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:3px 9px;border-radius:99px;font-weight:600;}
+    .card-thumb-title{font-family:'Cormorant Garamond',serif;font-size:0.88rem;font-weight:700;color:var(--gold-pale);text-align:center;line-height:1.3;text-transform:uppercase;letter-spacing:0.03em;margin:0;padding-top:8px;}
+    .card-check{display:none;position:absolute;bottom:9px;right:9px;width:22px;height:22px;background:var(--gold);border-radius:50%;align-items:center;justify-content:center;font-size:11px;color:var(--green-deep);font-weight:700;}
+    .card.done .card-check{display:flex;}
+    .card-body{padding:14px 16px 18px;}
+    .card-num{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);font-weight:600;margin-bottom:5px;}
+    .card-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--green-deep);line-height:1.3;margin-bottom:7px;}
+    .card-desc{font-size:11.5px;color:#999;line-height:1.55;margin-bottom:10px;}
+    .card-status{font-size:10px;font-weight:500;color:#ccc;}
+    .card.done .card-status{color:var(--gold-dim);}
+
+    /* MODAL OVERLAY */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(13,43,26,0.75);z-index:200;align-items:center;justify-content:center;padding:20px;}
+    .modal-overlay.open{display:flex;animation:fadeIn 0.22s ease;}
+    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+    /* MODAL */
+    .modal{background:var(--cream);border-radius:20px;max-width:760px;width:100%;max-height:92vh;overflow-y:auto;position:relative;box-shadow:0 28px 80px rgba(0,0,0,0.45);animation:slideUp 0.28s cubic-bezier(0.4,0,0.2,1);}
+    @keyframes slideUp{from{transform:translateY(28px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+    .modal-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.15);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:14px;color:rgba(255,255,255,0.8);z-index:10;transition:background 0.2s;}
+    .modal-close:hover{background:var(--gold);color:white;}
+
+    /* VIDEO */
+    .modal-video-wrap{position:relative;padding-top:52%;background:linear-gradient(135deg,var(--green-deep),var(--green-card));border-radius:20px 20px 0 0;overflow:hidden;}
+    .modal-video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+    .no-video{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+    .no-video-icon{width:58px;height:58px;border-radius:50%;background:rgba(201,162,39,0.15);border:1.5px solid rgba(201,162,39,0.3);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold-light);}
+    .no-video p{font-size:13px;color:rgba(255,255,255,0.38);}
+    .modal-video-badge{position:absolute;top:14px;left:16px;background:rgba(255,255,255,0.13);color:rgba(255,255,255,0.88);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 11px;border-radius:99px;font-weight:600;z-index:2;}
+
+    /* MODAL BODY */
+    .modal-body{padding:26px 30px 34px;}
+    .modal-num{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-dim);font-weight:600;margin-bottom:6px;}
+    .modal-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--green-deep);margin-bottom:8px;line-height:1.2;}
+    .modal-desc{font-size:13px;color:#888;line-height:1.7;margin-bottom:22px;}
+
+    .mini-label{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-dim);font-weight:600;margin-bottom:12px;}
+
+    /* FRASE */
+    .frase-block{background:linear-gradient(135deg,var(--green-deep),var(--green-mid));border-radius:12px;padding:20px 22px;margin-bottom:22px;position:relative;overflow:hidden;}
+    .frase-block::before{content:'"';position:absolute;top:-10px;left:8px;font-family:'Cormorant Garamond',serif;font-size:80px;color:rgba(201,162,39,0.10);line-height:1;}
+    .frase-label{font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;}
+    .frase-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--gold-pale);line-height:1.65;margin:0;font-style:italic;position:relative;}
+
+    /* PUNTOS */
+    .puntos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
+    .punto-item{display:flex;align-items:flex-start;gap:10px;background:var(--white);border:1px solid var(--cream-dark);border-radius:10px;padding:12px 14px;}
+    .punto-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:5px;flex-shrink:0;}
+    .punto-item span{font-size:12px;color:#444;line-height:1.55;}
+
+    /* ACTIVIDADES */
+    .actividades-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;}
+    .actividad-card{background:var(--white);border:1.5px solid var(--cream-dark);border-radius:12px;padding:16px 14px;text-align:center;}
+    .actividad-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--gold);margin:0;line-height:1;}
+    .actividad-label{font-size:11px;font-weight:600;color:var(--green-deep);margin:6px 0 4px;}
+    .actividad-desc{font-size:10px;color:#aaa;line-height:1.4;}
+
+    /* CONSEJO */
+    .consejo-block{background:var(--white);border:1.5px solid rgba(201,162,39,0.25);border-left:4px solid var(--gold);border-radius:12px;padding:18px 20px;margin-bottom:22px;}
+    .consejo-text{font-size:13px;color:var(--green-deep);line-height:1.7;margin:8px 0 0;font-weight:500;}
+
+    /* TAREA */
+    .tarea-block{background:var(--white);border:1.5px solid var(--cream-dark);border-radius:12px;padding:18px 20px;margin-bottom:22px;}
+    .tarea-inner{background:var(--cream);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 14px;margin-top:10px;}
+    .tarea-inner p{font-size:13px;color:var(--green-deep);font-weight:500;line-height:1.65;}
+
+    /* RECURSOS */
+    .recursos-list{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px;}
+    .recurso-btn{display:flex;align-items:center;gap:8px;background:var(--white);border:1.5px solid var(--cream-dark);border-radius:8px;padding:10px 16px;cursor:pointer;text-decoration:none;color:var(--green-deep);font-size:12px;font-weight:500;transition:border-color 0.2s,box-shadow 0.2s;}
+    .recurso-btn:hover{border-color:var(--gold);box-shadow:0 2px 10px rgba(201,162,39,0.15);}
+    .recurso-btn span:first-child{font-size:16px;}
+
+    /* ACCIONES */
+    .modal-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .btn-complete{background:linear-gradient(135deg,var(--green-mid),var(--green-deep));color:var(--gold-light);border:none;padding:13px 26px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:0.03em;transition:all 0.22s;}
+    .btn-complete:hover{box-shadow:0 6px 20px rgba(201,162,39,0.25);}
+    .btn-complete.done{background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:white;}
+    .btn-nav{background:var(--white);color:var(--green-deep);border:1.5px solid var(--cream-dark);padding:13px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:border-color 0.2s;}
+    .btn-nav:hover{border-color:var(--gold);}
+
+    /* FOOTER */
+    .footer{background:var(--green-deep);border-top:1px solid rgba(201,162,39,0.18);padding:36px 32px;text-align:center;}
+    .footer img{width:52px;height:52px;border-radius:50%;border:2px solid var(--gold-dim);object-fit:cover;object-position:top;display:block;margin:0 auto 12px;}
+    .footer p{font-size:12px;color:rgba(255,255,255,0.35);margin-top:10px;}
+    .footer strong{color:var(--gold-light);}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){.modules-grid{grid-template-columns:repeat(2,1fr);}.puntos-grid,.actividades-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:580px){
+      .header-inner,.medals-inner,.medals-row,.section-wrap,.modules-wrap{padding-left:18px;padding-right:18px;}
+      .modules-grid{grid-template-columns:1fr;}
+      .puntos-grid{grid-template-columns:1fr;}
+      .actividades-grid{grid-template-columns:1fr;}
+      .modal-body{padding:20px 18px 28px;}
+      .prog-track{width:110px;}
+      .modal{border-radius:16px;}
+    }
+  </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="site-header">
+  <header class="header">
     <div class="header-inner">
       <div class="logo-area">
-        <img src="assets/logo.jpg" alt="Golden Trust Financial Group" class="logo-img" />
-        <div class="logo-text">
-          <span class="logo-title">Golden Trust</span>
-          <span class="logo-sub">Financial Group · Academia</span>
+        <img src="assets/logo.jpg" alt="Golden Trust" class="logo-img" />
+        <div class="logo-texts">
+          <span class="logo-eyebrow">Academia</span>
+          <span class="logo-title">Golden Trust Financial Group</span>
+          <span class="logo-sub">con Elizabeth Jiménez &nbsp;·&nbsp; <span id="greeting">Hola, Agente</span></span>
         </div>
       </div>
-      <div class="header-meta">
-        <span class="instructor-tag">con <strong>Elizabeth Jiménez</strong></span>
+      <div class="header-progress">
+        <p class="prog-label" id="mod-counter">0 / 13 módulos</p>
+        <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+        <p class="prog-pct" id="prog-pct">0%</p>
       </div>
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <p class="hero-eyebrow">Programa de Formación Profesional</p>
-      <h1 class="hero-title">Tu Camino al<br /><span class="gold-text">Éxito Financiero</span></h1>
-      <p class="hero-desc">Desarrolla las habilidades, mentalidad y estrategias que necesitas para crecer en el mundo financiero con Golden Trust.</p>
-      <div class="hero-stats">
-        <div class="stat"><span class="stat-num" id="total-modules">13</span><span class="stat-label">Módulos</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><span class="stat-num" id="completed-count">0</span><span class="stat-label">Completados</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><span class="stat-num" id="progress-pct">0%</span><span class="stat-label">Progreso</span></div>
-      </div>
-      <div class="hero-progress-bar">
-        <div class="hero-progress-fill" id="hero-progress-fill"></div>
-      </div>
-    </div>
-    <div class="hero-decoration">
-      <div class="deco-circle deco-1"></div>
-      <div class="deco-circle deco-2"></div>
-    </div>
-  </section>
-
-  <!-- PROGRESS MEDALS -->
-  <section class="medals-section">
+  <section class="medals-bar">
     <div class="medals-inner">
-      <div class="medals-header">
-        <div>
-          <h3 class="medals-title">🏅 Tus Medallas</h3>
-          <p class="medals-sub">Completa cada módulo para ganar tu medalla</p>
-        </div>
-        <div class="medals-pts"><span id="total-pts">0</span> <small>pts totales</small></div>
+      <div class="medals-left">
+        <h3>🏅 Tus Medallas</h3>
+        <p>Completa cada módulo para ganar tu medalla</p>
       </div>
-      <div class="medals-row" id="medals-row">
-        <!-- medals generated by JS -->
-      </div>
+      <div class="medals-pts" id="pts">0 pts</div>
     </div>
+    <div class="medals-row" id="medals-row"></div>
   </section>
 
-  <!-- MODULES GRID -->
-  <section class="modules-section">
-    <div class="modules-inner">
-      <div class="section-label">
-        <span class="label-line"></span>
-        <span class="label-text">MÓDULOS DE ENTRENAMIENTO</span>
-        <span class="label-line"></span>
-      </div>
-      <div class="modules-grid" id="modules-grid">
-        <!-- modules generated by JS -->
-      </div>
+  <div class="section-wrap">
+    <div class="section-label">
+      <span class="label-line"></span>
+      <span class="label-text">MÓDULOS DE ENTRENAMIENTO</span>
+      <span class="label-line"></span>
     </div>
-  </section>
+  </div>
 
-  <!-- MODULE MODAL -->
+  <div class="modules-wrap">
+    <div class="modules-grid" id="modules-grid"></div>
+  </div>
+
+  <!-- MODAL -->
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal" id="modal">
       <button class="modal-close" id="modal-close">✕</button>
+
       <div class="modal-video-wrap">
-        <iframe id="modal-video" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <span class="modal-video-badge" id="modal-num-badge">Módulo 1</span>
+        <iframe id="modal-video" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div class="no-video" id="no-video">
+          <div class="no-video-icon">▶</div>
+          <p>Video próximamente disponible</p>
+        </div>
       </div>
+
       <div class="modal-body">
-        <p class="modal-module-num" id="modal-num"></p>
+        <p class="modal-num"  id="modal-num"></p>
         <h2 class="modal-title" id="modal-title"></h2>
-        <p class="modal-desc" id="modal-desc"></p>
+        <p class="modal-desc"  id="modal-desc"></p>
+
+        <!-- FRASE -->
+        <div id="modal-frase-wrap">
+          <div class="frase-block">
+            <p class="frase-label">Palabras de Elizabeth Jiménez</p>
+            <p class="frase-text" id="modal-frase"></p>
+          </div>
+        </div>
+
+        <!-- PUNTOS -->
+        <div id="modal-puntos-wrap">
+          <p class="mini-label">Lo que aprenderás</p>
+          <div class="puntos-grid" id="modal-puntos-grid"></div>
+        </div>
+
+        <!-- ACTIVIDADES -->
+        <div id="modal-actividades-wrap">
+          <p class="mini-label">📊 Actividades diarias recomendadas</p>
+          <div class="actividades-grid" id="modal-actividades-grid"></div>
+        </div>
+
+        <!-- CONSEJO -->
+        <div id="modal-consejo-wrap">
+          <div class="consejo-block">
+            <p class="mini-label">💡 Consejo de Elizabeth</p>
+            <p class="consejo-text" id="modal-consejo-text"></p>
+          </div>
+        </div>
+
+        <!-- TAREA -->
+        <div id="modal-tarea-wrap">
+          <div class="tarea-block">
+            <p class="mini-label">🎯 Tu tarea de este módulo</p>
+            <div class="tarea-inner"><p id="modal-tarea-text"></p></div>
+          </div>
+        </div>
+
+        <!-- RECURSOS -->
+        <div id="modal-recursos-wrap">
+          <p class="mini-label">📎 Recursos del módulo</p>
+          <div class="recursos-list" id="modal-recursos-list"></div>
+        </div>
+
         <div class="modal-actions">
           <button class="btn-complete" id="btn-complete">✓ Marcar como completado</button>
-          <button class="btn-resources" id="btn-resources" style="display:none">📎 Ver recursos</button>
+          <button class="btn-nav" id="btn-prev">← Anterior</button>
+          <button class="btn-nav" id="btn-next">Siguiente →</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <img src="assets/logo.jpg" alt="Golden Trust" class="footer-logo" />
-      <p>© 2025 Golden Trust Financial Group · Academia con <strong>Elizabeth Jiménez</strong></p>
-    </div>
+  <footer class="footer">
+    <img src="assets/logo.jpg" alt="Golden Trust" />
+    <p>© 2025 Golden Trust Financial Group · Academia con <strong>Elizabeth Jiménez</strong></p>
   </footer>
 
   <script src="data.js"></script>
