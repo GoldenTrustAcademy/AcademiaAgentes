@@ -126,6 +126,21 @@
     .tarea-inner{background:var(--cream);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 14px;margin-top:10px;}
     .tarea-inner p{font-size:13px;color:var(--green-deep);font-weight:500;line-height:1.65;}
 
+    /* APERTURAS */
+    .aperturas-list { display:flex; flex-direction:column; gap:10px; margin-bottom:22px; }
+    .apertura-item { display:flex; align-items:flex-start; gap:12px; background:var(--white); border:1px solid var(--cream-dark); border-radius:10px; padding:14px 16px; }
+    .apertura-emoji { font-size:18px; flex-shrink:0; }
+    .apertura-cat { font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold-dim); font-weight:600; margin:0 0 5px; }
+    .apertura-q { font-size:13px; color:var(--green-deep); line-height:1.6; margin:0; font-style:italic; }
+
+    /* ERRORES */
+    .errores-block { background:var(--white); border:1.5px solid var(--cream-dark); border-radius:12px; padding:16px 20px; margin-bottom:22px; }
+    .error-item { display:flex; align-items:flex-start; gap:12px; }
+    .error-x { width:22px; height:22px; border-radius:50%; background:#fff3f3; border:1.5px solid #e74c3c; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:11px; color:#e74c3c; font-weight:700; }
+    .error-title { font-size:12px; font-weight:600; color:var(--green-deep); margin:0 0 3px; }
+    .error-tip { font-size:11px; color:#aaa; margin:0; line-height:1.45; }
+    .error-divider { height:1px; background:var(--cream-dark); margin:10px 0; }
+
     /* RECURSOS */
     .recursos-list{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px;}
     .recurso-btn{display:flex;align-items:center;gap:8px;background:var(--white);border:1.5px solid var(--cream-dark);border-radius:8px;padding:10px 16px;cursor:pointer;text-decoration:none;color:var(--green-deep);font-size:12px;font-weight:500;transition:border-color 0.2s,box-shadow 0.2s;}
@@ -233,6 +248,20 @@
         <div id="modal-puntos-wrap">
           <p class="mini-label">Lo que aprenderás</p>
           <div class="puntos-grid" id="modal-puntos-grid"></div>
+        </div>
+
+        <!-- APERTURAS -->
+        <div id="modal-aperturas-wrap">
+          <p class="mini-label">📞 Saca el Dolor — Preguntas de Apertura</p>
+          <div id="modal-aperturas-list" class="aperturas-list"></div>
+        </div>
+
+        <!-- ERRORES -->
+        <div id="modal-errores-wrap">
+          <p class="mini-label">⚠️ Errores que debes evitar</p>
+          <div class="errores-block">
+            <div id="modal-errores-list"></div>
+          </div>
         </div>
 
         <!-- ACTIVIDADES -->

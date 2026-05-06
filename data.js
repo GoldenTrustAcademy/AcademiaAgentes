@@ -95,7 +95,7 @@ const ACADEMY_DATA = {
       id: 4,
       title:       "El Lenguaje que Abre Puertas y Cierra Ventas",
       description: "Domina el guión IUL que convierte conversaciones en ventas. El lenguaje correcto marca toda la diferencia.",
-      driveId:     null,
+      driveId:     "1TNrMO1PGfwN7wjcadjoHA7ljDFveL0uJ",
       frase:       "Las palabras correctas en el momento correcto valen más que cualquier producto.",
       puntos: [
         "El guión IUL paso a paso que funciona en el campo real",
@@ -103,10 +103,29 @@ const ACADEMY_DATA = {
         "Las frases exactas que generan confianza inmediata",
         "Cómo adaptar tu lenguaje a cada tipo de cliente"
       ],
-      actividades: null,
-      consejo: null,
-      tarea: "Practica el guión completo frente al espejo 3 veces y grábate una vez para escucharte.",
-      resources: []
+      aperturas: [
+        { emoji: "👨‍👩‍👧", categoria: "Proteger a la Familia",      pregunta: "¿Quiénes son las personas que, si faltaras, te preocuparía que tengan que batallar?" },
+        { emoji: "🛡️",      categoria: "Protegerse a Sí Mismo",     pregunta: "¿Alguna vez has pensado qué pasaría si no pudieras trabajar por unos meses?" },
+        { emoji: "🌅",      categoria: "Asegurar un Buen Retiro",    pregunta: "Si hoy pudieras mejorar una sola cosa de tu futuro, ¿cuál sería?" },
+        { emoji: "💰",      categoria: "Si Elige Ahorro",            pregunta: "Normalmente cuando pensamos en ahorro es porque tenemos un plan... ¿cuál es el tuyo?" }
+      ],
+      errores: [
+        { error: "Hablar demasiado rápido por los nervios",          tip: "Respira, pausa, y deja que el cliente procese lo que escucha" },
+        { error: "Improvisar antes de dominar el guión base",        tip: "El guión existe porque funciona — primero domínalo, luego adáptalo" },
+        { error: "No escuchar al cliente",                           tip: "Las mejores oportunidades de cierre están en lo que el cliente dice, no en lo que tú dices" }
+      ],
+      actividades: [
+        { numero: "3×",  label: "Practica el guión",  desc: "Repítelo frente al espejo hasta que salga natural" },
+        { numero: "1×",  label: "Grábate",            desc: "Escúchate para identificar qué mejorar" },
+        { numero: "2×",  label: "Roleplay",           desc: "Simula una cita real con tu upline antes del campo" }
+      ],
+      actividadesLabel: "🎭 Recomendaciones de práctica",
+      consejo: "No salgas al campo hasta que el guión suene natural — no memorizado. La diferencia entre los dos es la confianza que transmites al cliente.",
+      tarea: "Practica el guión completo frente al espejo 3 veces, grábate una vez y haz un roleplay con tu upline antes de tu próxima cita.",
+      resources: [
+        { label: "Script de Ventas",          url: "https://drive.google.com/file/d/16EZsV60Wv5gCCdtn-jaMt8u8C5xZa1ca/view", icon: "📄" },
+        { label: "Planilla de Elegibilidad",  url: "https://drive.google.com/file/d/1yQpQ47YTq8rm04dkknlavrvvjaRkEgNl/view", icon: "✅" }
+      ]
     },
     {
       id: 5,

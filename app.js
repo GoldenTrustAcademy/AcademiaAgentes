@@ -119,6 +119,41 @@ function openModal(id) {
     puntosWrap.style.display = 'none';
   }
 
+  // Aperturas
+  const aperturasWrap = document.getElementById('modal-aperturas-wrap');
+  const aperturasEl   = document.getElementById('modal-aperturas-list');
+  if (m.aperturas && m.aperturas.length > 0) {
+    aperturasEl.innerHTML = m.aperturas.map(a => `
+      <div class="apertura-item">
+        <span class="apertura-emoji">${a.emoji}</span>
+        <div>
+          <p class="apertura-cat">${a.categoria}</p>
+          <p class="apertura-q">"${a.pregunta}"</p>
+        </div>
+      </div>`).join('');
+    aperturasWrap.style.display = 'block';
+  } else {
+    aperturasWrap.style.display = 'none';
+  }
+
+  // Errores
+  const erroresWrap = document.getElementById('modal-errores-wrap');
+  const erroresEl   = document.getElementById('modal-errores-list');
+  if (m.errores && m.errores.length > 0) {
+    erroresEl.innerHTML = m.errores.map((e, i) => `
+      <div class="error-item">
+        <div class="error-x">✕</div>
+        <div>
+          <p class="error-title">${e.error}</p>
+          <p class="error-tip">${e.tip}</p>
+        </div>
+      </div>
+      ${i < m.errores.length - 1 ? '<div class="error-divider"></div>' : ''}`).join('');
+    erroresWrap.style.display = 'block';
+  } else {
+    erroresWrap.style.display = 'none';
+  }
+
   // Actividades
   const actWrap = document.getElementById('modal-actividades-wrap');
   const actGrid = document.getElementById('modal-actividades-grid');
