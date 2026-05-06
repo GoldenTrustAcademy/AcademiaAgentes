@@ -123,6 +123,8 @@ function openModal(id) {
   const actWrap = document.getElementById('modal-actividades-wrap');
   const actGrid = document.getElementById('modal-actividades-grid');
   if (m.actividades && m.actividades.length > 0) {
+    const actLabel = document.querySelector('#modal-actividades-wrap .mini-label');
+    if (actLabel) actLabel.textContent = (m.actividadesLabel || '📊 Actividades diarias recomendadas');
     actGrid.innerHTML = m.actividades.map(a => `
       <div class="actividad-card">
         <p class="actividad-num">${a.numero}</p>

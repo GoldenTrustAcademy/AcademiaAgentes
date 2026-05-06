@@ -71,7 +71,7 @@ const ACADEMY_DATA = {
       id: 3,
       title:       "Bienvenido al Sistema Golden Trust",
       description: "Todo lo que necesitas para arrancar con fuerza. Conoce las herramientas y procesos fundamentales del negocio.",
-      driveId:     null,
+      driveId:     "1MJbJdjxvsEvOka53gHohzz2CPkJIwcxI",
       frase:       "Un sistema probado en manos de alguien comprometido es imbatible.",
       puntos: [
         "Cómo funciona el negocio de principio a fin",
@@ -79,10 +79,17 @@ const ACADEMY_DATA = {
         "Tu mapa de ruta para los primeros 90 días",
         "Cómo aprovechar al máximo el apoyo de tu equipo"
       ],
-      actividades: null,
-      consejo: null,
-      tarea: "Completa tu perfil en todas las plataformas y agenda tu primera reunión de equipo.",
-      resources: []
+      actividades: [
+        { numero: "$25",    label: "Costo por Lead",       desc: "Inversión promedio para conseguir un prospecto" },
+        { numero: "$2,400", label: "Prima Anualizada",     desc: "El valor promedio de cada póliza que cierras" },
+        { numero: "1/10",   label: "Tasa de Conversión",   desc: "1 venta por cada 10 leads contactados" }
+      ],
+      actividadesLabel: "La Matemática de tu Negocio",
+      consejo: "Arranca fuerte desde el día uno. Los primeros 30 días marcan el tono de todo tu negocio — no esperes sentirte listo para empezar, empieza y te sentirás listo.",
+      tarea: "Completa tu perfil en todas las plataformas, estudia la Matemática del Éxito y agenda tu primera reunión de equipo esta semana.",
+      resources: [
+        { label: "Matemática del Éxito · Golden Trust", url: "https://drive.google.com/file/d/1aT8r4-K643uT96EszQ9MR0swn450BEgK/view", icon: "📊" }
+      ]
     },
     {
       id: 4,
